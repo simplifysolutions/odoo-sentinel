@@ -16,6 +16,12 @@ import traceback
 from datetime import datetime
 from functools import reduce
 
+from halo import Halo
+
+import logging
+LOG_FILENAME = '/tmp/sentinel.log'
+logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
+
 locale.setlocale(locale.LC_ALL, '')
 encoding = locale.getpreferredencoding()
 
@@ -522,12 +528,14 @@ class Sentinel(object):
         Displays an error message, changing the background to red
         """
         # Display error message
+        curses.beep()
         self._display_message(
             error_message, color='error', bgcolor=True, clear=True,
             scroll=True, title=title)
         # Restore normal background colors
         self.screen.bkgd(0, self._get_color('base'))
 
+    @Halo(text='Loading', spinner='dots')
     def oerp_call(self, action, message=False):
         """
         Calls a method from Odoo Server

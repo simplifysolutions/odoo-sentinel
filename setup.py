@@ -12,6 +12,7 @@ setup(
     package_data={'odoo_sentinel': ['i18n/*/LC_MESSAGES/*.mo']},
     install_requires=[
         'odoorpc',
+        'halo',
     ],
     setup_requires=[
         'setuptools_scm',

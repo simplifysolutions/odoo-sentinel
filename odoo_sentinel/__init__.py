@@ -18,6 +18,7 @@ from functools import reduce
 
 from halo import Halo
 
+
 locale.setlocale(locale.LC_ALL, '')
 encoding = locale.getpreferredencoding()
 
@@ -70,7 +71,7 @@ class Sentinel(object):
             raise Exception(
                 'Profile "{options.profile}" not found in file '
                 '{options.config_file}!'
-            .format(options=options))
+                .format(options=options))
 
         self.log_file = os.path.expanduser(options.log_file)
         self.test_file = None
@@ -83,7 +84,7 @@ class Sentinel(object):
         try:
             language = gettext.translation(
                 I18N_DOMAIN, I18N_DIR, languages=[lang])
-        except:
+        except Exception:
             language = gettext.translation(
                 I18N_DOMAIN, I18N_DIR, languages=[I18N_DEFAULT])
 
@@ -111,11 +112,11 @@ class Sentinel(object):
             ssh_data = os.environ['SSH_CONNECTION'].split(' ')
             self.hardware_code = ssh_data[0]
             self.scanner_check()
-        except:
+        except Exception:
             try:
                 self.hardware_code = os.environ['ODOO_SENTINEL_CODE']
                 self.scanner_check()
-            except:
+            except Exception:
                 self.hardware_code = self._input_text(
                     _('Autoconfiguration failed !\nPlease enter terminal code')
                 )
@@ -531,7 +532,7 @@ class Sentinel(object):
         # Restore normal background colors
         self.screen.bkgd(0, self._get_color('base'))
 
-    @Halo(text='Loading', spinner='dots')
+    @Halo(text='Loading', spinner='line')
     def oerp_call(self, action, message=False):
         """
         Calls a method from Odoo Server
@@ -921,6 +922,7 @@ def main():
     args = parser.parse_args(sys.argv[1:])
 
     curses.wrapper(Sentinel, args)
+
 
 if __name__ == '__main__':
     main()

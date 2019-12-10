@@ -18,10 +18,6 @@ from functools import reduce
 
 from halo import Halo
 
-import logging
-LOG_FILENAME = '/tmp/sentinel.log'
-logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
-
 locale.setlocale(locale.LC_ALL, '')
 encoding = locale.getpreferredencoding()
 

@@ -783,7 +783,7 @@ class Sentinel(object):
             elif key.isdigit():
                 # Digit : Add at end of index
                 highlighted = highlighted * 10 + int(key)
-                digit_key = True
+                # digit_key = True
             elif key == 'KEY_BACKSPACE' or key == 'KEY_DC':
                 # Backspace : Remove last digit from index
                 highlighted = int(math.floor(highlighted / 10))

@@ -17,7 +17,7 @@ from datetime import datetime
 from functools import reduce
 
 from halo import Halo
-
+from playsound import playsound
 
 locale.setlocale(locale.LC_ALL, '')
 encoding = locale.getpreferredencoding()
@@ -74,6 +74,7 @@ class Sentinel(object):
                 .format(options=options))
 
         self.log_file = os.path.expanduser(options.log_file)
+        self.audio_file = os.path.expanduser(options.audio_file)
         self.test_file = None
         if options.test_file:
             self.test_file = open(os.path.expanduser(options.test_file), 'r')
@@ -247,6 +248,7 @@ class Sentinel(object):
         """
         Display a line of text
         """
+
         # Clear the sceen if needed
         if clear:
             self.screen.clear()
@@ -351,7 +353,25 @@ class Sentinel(object):
                     else:
                         # Search for a step title
                         title = None
+                        beep = False
                         title_key = '|'
+                        beep_key = '^'
+
+                        if isinstance(result, (type(None), bool)):
+                            pass
+                        elif (isinstance(result, dict) and
+                              result.get(beep_key, None)):
+                            beep = True
+                            del result[beep_key]
+                        elif (isinstance(result[-1], (tuple, list)) and
+                              result[-1][0] == beep_key):
+                            result.pop()
+                            beep = True
+                        elif (isinstance(result[-1], str) and
+                              result[-1].startswith(beep_key)):
+                            beep = True
+                            result.pop()
+
                         if isinstance(result, (type(None), bool)):
                             pass
                         elif (isinstance(result, dict) and
@@ -368,6 +388,12 @@ class Sentinel(object):
                         if title is None and self.scenario_name:
                             # If no title is defined, display the scenario name
                             title = self.scenario_name
+                        if beep:
+                            try:
+                                # Play an audio file
+                                playsound(self.audio_file)
+                            except:
+                                pass
 
                         if code == 'Q' or code == 'N':
                             # Quantity selection
@@ -391,7 +417,6 @@ class Sentinel(object):
                                 size = value.get('size', None)
                             elif isinstance(value, str):
                                 default = value
-
                             # Text input
                             text = self._input_text(
                                 '\n'.join(result), default=default,
@@ -645,6 +670,7 @@ class Sentinel(object):
         # While we do not validate, store characters
         while True:
             # Clear the screen
+
             self._display(clear=True)
 
             # Display the current value if echoing is needed
@@ -919,6 +945,8 @@ def main():
         help='OdooRPC profile to use.')
     parser.add_argument(
         '-t', '--test-file', dest='test_file', help='Test file to execute.')
+    parser.add_argument(
+        '-b', '--audio-file', dest='audio_file', default='~/beep.mp3', help='Beep sound file.')
     args = parser.parse_args(sys.argv[1:])
 
     curses.wrapper(Sentinel, args)

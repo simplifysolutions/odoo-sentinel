@@ -13,3 +13,4 @@ Command line arguments
 - -c: OdooRPC's configuration file to use.
 - -l: Logfile where to write logs.
 - -t: Test file to read for inputs.
+- -b: Audio file for a different Beep sound

@@ -17,7 +17,7 @@ from datetime import datetime
 from functools import reduce
 
 from halo import Halo
-from playsound import playsound
+# from playsound import playsound
 
 locale.setlocale(locale.LC_ALL, '')
 encoding = locale.getpreferredencoding()
@@ -391,7 +391,8 @@ class Sentinel(object):
                         if beep:
                             try:
                                 # Play an audio file
-                                playsound(self.audio_file)
+                                # playsound(self.audio_file)
+                                os.system("echo -e '\a'")
                             except:
                                 pass
 

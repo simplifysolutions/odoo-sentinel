@@ -13,7 +13,7 @@ setup(
     install_requires=[
         'odoorpc',
         'halo',
-        'playsound',
+        # 'playsound',
     ],
     setup_requires=[
         'setuptools_scm',
